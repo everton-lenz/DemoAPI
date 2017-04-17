@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+
+        <h:form id="mainForm">
+
+			<p:panelGrid columns="1" styleClass="div_form" style="width: 26%;">
+				
+				<h:panelGrid style="width:100%" columns="1">
+
+					<p:columnGroup>
+						<h2 class="cabecario">#{msg['global.cabecario.form']} #{msg['entity.profile']}</h2>
+						<h:outputLink value="#" rendered="#{profileController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+						<p:tooltip id="toolTip" value="#{profileController.helper}" for="help-module" style="position: absolute;" rendered="#{profileController.bHelper}" showEvent="focus" hideEvent="blur"/>
+					</p:columnGroup>
+					<p:separator id="separator" style="width:99%;" />
+	
+					<h:panelGrid columns="2" styleClass="table_form">
+	
+						<p:outputLabel for="inputId" value="#{msg['entity.id']}"/>
+						<p:inputText id="inputId" disabled="true" styleClass="inputTiny" converter="javax.faces.Integer" value="#{profileController.entity.id}"/>
+	
+						<p:outputLabel for="inputName" value="#{msg['entity.name']}"/>
+						<p:inputText id="inputName" styleClass="inputLarge" required="true" value="#{profileController.entity.name}"/>
+	
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<p:selectManyCheckbox id="gridModule" value="#{profileController.entity.modules}" layout="grid" columns="3" converter="#{moduleConverter}">
+					<f:selectItems value="#{profileController.modules}" var="module" itemLabel="#{module.name}"/>
+				</p:selectManyCheckbox>
+				<h:panelGrid columns="2">
+					<p:commandButton styleClass="btn-back" immediate="true" value="#{msg['entity.back']}" action="#{profileController.getListPath()}" icon="ui-icon-arrowthick-1-w"/>
+					<p:commandButton value="#{msg['entity.save']}" styleClass="btn-green" icon="fa fa-floppy-o" action="#{profileController.save()}" partialSubmit="true"
+									 onclick="PF('blockUI').block()"
+									 oncomplete="PF('blockUI').unblock();"/>
+				</h:panelGrid>
+
+			</p:panelGrid>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

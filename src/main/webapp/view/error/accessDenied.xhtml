@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:p="http://primefaces.org/ui"
+				template="/templates/template.xhtml">
+	<ui:define name="content">
+		<h:body>
+			<h:form id="mainForm">
+				<p:panelGrid styleClass="div_form_error" columns="1">
+					<h:panelGrid style="width: 100%">
+						<h:panelGrid columns="1" style="width: 100%; text-align: center">
+							<i class="fa fa-lock" style="font-size: 75px; color: #D0525D;"></i>
+							<h:outputText value="#{msg['global.access.denied.title']}" styleClass="font-error-title"/>
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<h:outputText value="#{msg['global.access.denied.detail']}" styleClass="font-error" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:panelGrid>
+			</h:form>
+		</h:body>
+	</ui:define>
+</ui:composition>

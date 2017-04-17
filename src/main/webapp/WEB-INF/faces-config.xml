@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+        version="2.1">
+
+  <lifecycle>
+      <phase-listener>br.com.sol7.orcamento.auth.AuthorizesListener</phase-listener>
+      <phase-listener>br.com.sol7.orcamento.auth.RestoreDynamicActionsObserver</phase-listener>
+  </lifecycle>
+
+    <!-- JSF and Spring are integrated -->
+    <application>
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+        
+        <resource-bundle>
+            <base-name>mensagens</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        
+        <message-bundle>mensagens</message-bundle>
+    </application>
+
+</faces-config>
+ 
+   

@@ -1,0 +1,115 @@
+* {
+    font-size: 11px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    padding: 0px;
+    font-family: segoe ui,Arial,sans-serif;
+}
+
+
+#logo {
+	width: 320px;
+	height: 100px;
+	float: left;
+	background-color: #003F89;
+	background-repeat:no-repeat;
+	background-position: center;
+}
+
+#loginBoxCenter {
+	position: absolute;
+	left: 50%;
+	padding: 25px;
+	width: 400px;
+	border: 1px solid #F36F35;
+	margin: 130px 0px 0px -225px;
+	background-color: #F1F1F1;
+	text-align: left;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	box-shadow:         4px 4px 15px rgba(50, 50, 50, 0.8);
+	-webkit-box-shadow: 4px 4px 15px rgba(50, 50, 50, 0.8);
+	-moz-box-shadow:    4px 4px 15px rgba(50, 50, 50, 0.8);
+}
+
+#loginBoxLeft {
+	float: left;
+	left: 50%;
+	padding: 25px;
+	width: 400px;
+	border: 1px solid #F36F35;
+	margin: 130px 100px 0px;
+	background-color: #F1F1F1;
+	text-align: left;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	box-shadow:         4px 4px 15px rgba(50, 50, 50, 0.8);
+	-webkit-box-shadow: 4px 4px 15px rgba(50, 50, 50, 0.8);
+	-moz-box-shadow:    4px 4px 15px rgba(50, 50, 50, 0.8);
+}
+
+#loginBoxRight {
+	float: right;
+	left: 50%;
+	padding: 25px;
+	width: 400px;
+	border: 1px solid #F36F35;
+	margin: 130px 100px 0px;
+	background-color: #F1F1F1;
+	text-align: left;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	box-shadow:         4px 4px 15px rgba(50, 50, 50, 0.8);
+	-webkit-box-shadow: 4px 4px 15px rgba(50, 50, 50, 0.8);
+	-moz-box-shadow:    4px 4px 15px rgba(50, 50, 50, 0.8);
+}
+
+#flash {
+	position: absolute;
+	padding: 5px;
+	margin: 120px 0px 0px 10px;
+	background-color: #F1F1F1;
+	text-align: center;
+}
+
+.loginBoxInput {
+	vertical-align: middle;
+	font-size: 14px;
+	padding: 5px;
+	width: 100%;
+	margin-left: -5px !important;
+}
+
+.loginBoxInput label {
+	color: #616161;
+	font-weight:bold;
+	vertical-align: middle !important;
+	font-size: 20px;
+	text-shadow: #279857 -1px -1px 0px;
+}
+
+.loginBoxInput input {
+	width: 90%;
+	padding: 5px;
+	font-size: 20px;
+	box-shadow:         1px 2px 10px rgba(50, 50, 50, 0.4);
+	-webkit-box-shadow: 1px 2px 10px rgba(50, 50, 50, 0.4);
+	-moz-box-shadow:    1px 2px 10px rgba(50, 50, 50, 0.4);
+}
+
+.loginBoxInput button {
+	margin-top: 15px !important;
+	padding: 2px;
+	width: 30%;
+}
+
+.loginBoxInput button span {
+	font-size: 20px;
+	font-weight: bold;
+	font-family: arial, verdana, tahoma;
+	text-shadow: #555 -1px -1px 0px;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite">
+
+	<cc:interface>
+		<cc:attribute name="url" required="true" />
+		<cc:attribute name="icon" required="true" />
+		<cc:attribute name="label" required="true" />
+		<cc:attribute name="value" required="true" />
+		<cc:attribute name="styleValue" required="false" />
+		<cc:attribute name="styleIcon" required="false" />
+		<cc:attribute name="styleIcon" required="false" />
+    </cc:interface>
+
+	<cc:implementation>
+		<a href="#{cc.attrs.url}" class="Responsive BorderedBox TexAlCenter HoverEffect" style="float: left; width: 80%">
+			<div class="ContainerIndent" style="width: 100%">
+				<table  style="width: 100%" >
+					<tbody>
+					<tr><td>
+						<div class="EmptyBox10"></div>
+					</td></tr>
+					<tr><td>
+						<i class="#{cc.attrs.icon} Fs24 infinite gray" style="#{cc.attrs.styleIcon}"/>
+					</td></tr>
+					<tr><td>
+						<span  style="#{cc.attrs.styleIcon}; padding: 10px;" class="Fs10 DispBlock gray">#{cc.attrs.label}</span><br/>
+					</td></tr>
+					<tr><td>
+						<span class="Fs24 DispBlock" style="#{cc.attrs.styleValue}">#{cc.attrs.value}</span>
+					</td></tr>
+					<tr><td>
+						<div class="EmptyBox10"></div>
+					</td></tr>
+
+					</tbody>
+				</table>
+			</div>
+		</a>
+
+	</cc:implementation>
+</html>

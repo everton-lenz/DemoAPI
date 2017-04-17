@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+
+        <h:form id="mainForm">
+
+			<p:panelGrid columns="1" styleClass="div_form" style="width: 26%;">
+
+				<h:panelGrid columns="1" style="width: 100%">
+					<p:columnGroup>
+						<h2 class="cabecario">#{msg['global.cabecario.form']} #{msg['entity.module']}</h2>
+						<h:outputLink value="#" rendered="#{moduleController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+						<p:tooltip id="toolTip" value="#{moduleController.helper}" for="help-module" style="position: absolute;" rendered="#{moduleController.bHelper}" showEvent="focus" hideEvent="blur"/>
+					</p:columnGroup>
+
+					<p:separator id="separator" style="width:99%;" />
+
+					<h:panelGrid columns="2" styleClass="table_form">
+
+						<p:outputLabel for="inputId" value="#{msg['entity.id']}"/>
+						<p:inputText id="inputId" disabled="true" styleClass="inputTiny" converter="javax.faces.Integer" value="#{moduleController.entity.id}"/>
+
+						<p:outputLabel for="inputName" value="#{msg['entity.name']}"/>
+						<p:inputText id="inputName" styleClass="inputLarge" required="true" value="#{moduleController.entity.name}"/>
+
+						<p:outputLabel for="inputDescription" value="#{msg['entity.description']}"/>
+						<p:inputTextarea id="inputDescription" styleClass="inputLarge" value="#{moduleController.entity.description}"/>
+
+						<p:outputLabel for="inputUrl" value="#{msg['entity.url']}"/>
+						<p:inputText id="inputUrl" styleClass="inputLarge" value="#{moduleController.entity.url}"/>
+
+						<p:outputLabel for="inputOrder" value="#{msg['entity.order']}"/>
+						<p:inputText id="inputOrder" styleClass="inputLarge" style="width: 50px;" required="true" value="#{moduleController.entity.order}"/>
+
+						<p:outputLabel value="#{msg['entity.icon']}"/>
+						<p:column>
+							<p:commandLink  id="linkicon" style="height: 22px; text-align: center" onclick="PF('icones').show()" >
+								<h:outputText styleClass="#{moduleController.entity.icon}" title="#{moduleController.entity.icon}"
+											  style="margin:0 auto; margin-right: 10px; height: 20px; font-size: 20px" />
+							</p:commandLink>
+
+							<p:commandButton icon="ui-icon-search" value="Selecione um #{msg['entity.icon']}"
+											 onclick="PF('icones').show()" style="margin:0 auto; height: 20px; font-size: 20px"/>
+						</p:column>
+
+						<p:outputLabel value="SubMenu"/>
+						<h:panelGrid style=" margin-left: -3px; margin-top: -3px;" id="columnGroup" columns="3">
+							<p:selectBooleanCheckbox id="inputDimension" value="#{moduleController.entity.submenu}">
+								<p:ajax event="change" update="mainForm:columnGroup"/>
+							</p:selectBooleanCheckbox>
+
+							<p:outputLabel for="inputModParent" rendered="#{moduleController.entity.submenu}" value="#{msg['entity.module']}"/>
+							<p:selectOneMenu id="inputModParent" rendered="#{moduleController.entity.submenu}" style="width: 200px;" value="#{moduleController.entity.moduleParent}" converter="#{moduleConverter}">
+								<f:selectItem itemLabel="#{msg['global.selecione']}"/>
+								<f:selectItems value="#{moduleController.moduleList}" var="module" itemLabel="#{module.name}" itemValue="#{module}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton styleClass="btn-back" immediate="true" value="#{msg['entity.back']}" action="#{moduleController.back()}" icon="ui-icon-arrowthick-1-w"/>
+					<p:commandButton value="#{msg['entity.save']}" styleClass="btn-green" icon="fa fa-floppy-o" action="#{moduleController.save()}" partialSubmit="true"
+									 onclick="PF('blockUI').block()"
+									 oncomplete="PF('blockUI').unblock();"/>
+				</h:panelGrid>
+			</p:panelGrid>
+
+			<p:dialog id="painelIcon" widgetVar="icones" header="Selecione um #{msg['entity.icon']}" width="1000" style="width: 1000px;" >
+				<h:panelGrid columns="2">
+						<p:dataGrid var="icon" value="#{moduleController.listIcons}" columns="20" layout="grid"
+									rows="200" paginator="true" id="icons" style="text-align:center !important; height: 400px;"
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="100,200,300,400,500,600">
+
+								<p:panel style="text-align:center">
+									<p:commandLink update="mainForm:linkicon" style="height: 22px;text-align: center" oncomplete="PF('icones').hide()"  >
+										<h:outputText styleClass="#{icon}" title="#{icon}" style="margin:0 auto;height: 14px;width:14px;font-size: 14px" />
+										<f:setPropertyActionListener value="#{icon}" target="#{moduleController.entity.icon}" />
+									</p:commandLink>
+								</p:panel>
+						</p:dataGrid>
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

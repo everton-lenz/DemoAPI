@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="mainForm">
+			<p:panelGrid columns="1" styleClass="div_form" style="width: 26%;">
+				<h:panelGrid columns="1" styleClass="table_form">
+					<p:columnGroup>
+						<h2 class="cabecario">#{msg['global.cabecario.list']} #{msg['entity.user']}</h2>
+						<h:outputLink value="#" rendered="#{userController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+						<p:tooltip id="toolTip" value="#{userController.helper}" for="help-module" style="position: absolute;" rendered="#{userController.bHelper}" showEvent="focus" hideEvent="blur"/>
+					</p:columnGroup>
+					<p:separator id="separator" style="width:99%;" />
+
+					<p:columnGroup>
+						<p:commandButton action="#{userController.prepareNewEntity}" value="#{msg['entity.insert']} #{msg['entity.user']}" icon="ui-icon-plus" ajax="false"/>
+					</p:columnGroup>
+
+					<p:dataTable id="table" widgetVar="table" var="entity" value="#{userController.userList}"
+								 paginator="true" rows="10" filteredValue="#{userController.filteredUser}"
+								 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 currentPageReportTemplate="(Pag. {currentPage}/{totalPages} - {totalRecords} registros)"
+								 paginatorPosition="bottom"
+								 rowsPerPageTemplate="10,15,30"
+								 emptyMessage="#{msg['global.emptyMessage']}">
+
+						<p:column headerText="#{msg['entity.id']}" style="width: 70px;" sortBy="#{entity.id}" filterBy="#{entity.id}" filterMatchMode="contains" filterStyle="width: 60px;">
+							<h:outputText value="#{entity.id}"/>
+						</p:column>
+
+						<p:column headerText="#{msg['entity.name']}" sortBy="#{entity.name}" filterBy="#{entity.name}" filterMatchMode="contains">
+							<h:outputText value="#{entity.name}"/>
+						</p:column>
+
+						<p:column headerText="#{msg['entity.email']}" sortBy="#{entity.email}" filterBy="#{entity.email}" filterMatchMode="contains">
+							<h:outputText value="#{entity.email}"/>
+						</p:column>
+
+						<p:column headerText="#{msg['entity.profile']}" sortBy="#{entity.profile.name}" filterBy="#{entity.profile.name}" filterMatchMode="contains">
+							<h:outputText value="#{entity.profile.name}"/>
+						</p:column>
+
+						<p:column headerText="#{msg['entity.last.login']}">
+							<h:outputText value="#{userController.getLastLogin(entity)}"/>
+							<i class="#{userController.getIconUser(entity)}" style="float:right; font-size: 23px;"/>
+						</p:column>
+
+						<p:column style="width: 150px;">
+							<p:commandButton icon="ui-icon-mail-closed" title="#{msg['title.config.message']}" ajax="false" action="#{userController.sendEmailNotification(entity)}" styleClass="btn-black" style="margin-left: 3px;">
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-key" title="#{msg['entity.change.password']}" oncomplete="PF('change').show();" styleClass="btn-yellow" style="margin-left: 3px;">
+								<f:setPropertyActionListener value="#{entity}" target="#{userController.entity}"/>
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-pencil" style="margin-left: 3px;" action="#{userController.getFormPath()}" ajax="false" title="Editar" styleClass="btn-green">
+								<f:setPropertyActionListener value="#{entity}" target="#{userController.entity}"/>
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash" title="Remover" oncomplete="PF('delete').show();" styleClass="btn-red" style="margin-left: 3px;">
+								<f:setPropertyActionListener value="#{entity}" target="#{userController.entity}"/>
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+
+			</p:panelGrid>
+
+		</h:form>
+
+		<h:form id="formDelete">
+			<p:dialog id="confirmDelete" header="#{msg['label.dialog.alert']}!" widgetVar="delete" style="width: 200px;" width="200">
+				<h:panelGrid columns="1">
+					<h:outputText value="#{msg['confirm.delete']}"/>
+				</h:panelGrid>
+				<br/>
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{msg['entity.yes']}" action="#{userController.delete()}" update=":mainForm" icon="ui-icon-check" oncomplete="PF('delete').hide();" />
+					<p:commandButton value="#{msg['entity.no']}" onclick="PF('delete').hide();" icon="ui-icon-cancel" type="button" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<h:form id="formChangePassword">
+			<p:dialog id="confirm" header="#{msg['label.dialog.alert']}!" widgetVar="change" style="width: 200px;" width="200">
+				<h:panelGrid columns="1">
+					<h:outputText value="#{msg['label.confirm.change.password']}"/>
+				</h:panelGrid>
+				<br/>
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{msg['entity.yes']}" action="#{userController.changePassword()}" update=":mainForm" icon="ui-icon-check" oncomplete="PF('change').hide();" />
+					<p:commandButton value="#{msg['entity.no']}" onclick="PF('change').hide();" icon="ui-icon-cancel" type="button" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

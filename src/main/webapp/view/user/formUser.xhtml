@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+
+        <h:form id="mainForm">
+			<p:panelGrid columns="1" styleClass="div_form" style="width: 26%;">
+
+				<h:panelGrid columns="1" style="width: 100%">
+					<p:columnGroup>
+						<h2 class="cabecario">#{msg['global.cabecario.form']} #{msg['entity.user']}</h2>
+						<h:outputLink value="#" rendered="#{userController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+						<p:tooltip id="toolTip" value="#{userController.helper}" for="help-module" style="position: absolute;" rendered="#{userController.bHelper}" showEvent="focus" hideEvent="blur"/>
+					</p:columnGroup>
+
+					<p:separator id="separator" style="width:99%;" />
+
+					<h:panelGrid columns="2" styleClass="table_form">
+
+						<p:outputLabel for="inputId" value="#{msg['entity.id']}"/>
+						<p:inputText id="inputId" disabled="true" styleClass="inputTiny" converter="javax.faces.Integer" value="#{userController.entity.id}"/>
+
+						<p:outputLabel for="inputName" value="#{msg['entity.name']}"/>
+						<p:inputText id="inputName" styleClass="inputLarge" required="true" value="#{userController.entity.name}"/>
+
+						<p:outputLabel for="inputEmail" value="#{msg['entity.email']}"/>
+						<p:inputText id="inputEmail" styleClass="inputLarge" required="true" value="#{userController.entity.email}"/>
+
+						<h:outputLabel style="padding-right: 12px;" for="inputPassword" value="#{msg['entity.password']} *"  rendered="#{userController.newEntity}"/>
+						<p:password id="inputPassword" value="#{userController.entity.password}" feedback="true" rendered="#{userController.newEntity}"
+									promptLabel="#{msg['password.prompt']}" weakLabel="#{msg['password.weak']}" required="true"
+									goodLabel="#{msg['password.good']}" strongLabel="#{msg['password.strong']}"/>
+
+						<p:outputLabel for="inputProfile" value="#{msg['entity.profile']}"/>
+						<p:selectOneMenu id="inputProfile" required="true" value="#{userController.entity.profile}" style="width:200px;" panelStyle="width:200px;"  converter="#{profileConverter}">
+							<f:selectItem itemLabel="#{msg['label.selecione']}" />
+							<f:selectItems value="#{userController.listAllProfile()}" var="entity" itemLabel="#{entity.name}" itemValue="#{entity}"/>
+						</p:selectOneMenu>
+
+						<p:outputLabel for="sendNotification" rendered="#{userController.newEntity}" value="#{msg['entity.user.notification.project']}"/>
+						<p:selectBooleanCheckbox id="sendNotification" rendered="#{userController.newEntity}" value="#{userController.sendNotification}"/>
+						<p:tooltip for="sendNotification" value="#{msg['entity.user.notification.project.tooltipe']}"/>
+
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton styleClass="btn-back" immediate="true" value="#{msg['entity.back']}" action="#{userController.getListPath()}" icon="ui-icon-arrowthick-1-w"/>
+					<p:commandButton value="#{msg['entity.save']}" styleClass="btn-green" icon="fa fa-floppy-o"
+									 action="#{userController.save()}"
+									 onclick="PF('blockUI').block()"
+									 oncomplete="PF('blockUI').unblock();"/>
+
+				</h:panelGrid>
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

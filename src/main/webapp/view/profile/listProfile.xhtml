@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+		
+		<h:form id="mainForm">
+
+
+			<p:panelGrid columns="1" styleClass="div_form" style="width: 26%;">
+
+				<h:panelGrid columns="1" styleClass="table_form">
+
+					<p:columnGroup>
+						<h2 class="cabecario">#{msg['global.cabecario.list']} #{msg['entity.profile']}</h2>
+						<h:outputLink value="#" rendered="#{profileController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+						<p:tooltip id="toolTip" value="#{profileController.helper}" for="help-module" style="position: absolute;" rendered="#{profileController.bHelper}" showEvent="focus" hideEvent="blur"/>
+					</p:columnGroup>
+					<p:separator id="separator" style="width:99%;" />
+
+					<p:columnGroup>
+						<p:commandButton action="#{profileController.prepareNewEntity}" value="#{msg['entity.insert']} #{msg['entity.profile']}" icon="ui-icon-plus" ajax="false"/>
+
+					</p:columnGroup>
+
+					<p:dataTable id="table" widgetVar="table" var="entity" value="#{profileController.profileList}"
+								 paginator="true" rows="10" filteredValue="#{profileController.filteredProfile}"
+								 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 currentPageReportTemplate="(Pag. {currentPage}/{totalPages} - {totalRecords} registros)"
+								 paginatorPosition="bottom"
+								 rowsPerPageTemplate="10,15,30"
+								 emptyMessage="#{msg['global.emptyMessage']}">
+
+						<p:column headerText="#{msg['entity.id']}" style="width: 70px;" sortBy="#{entity.id}" filterBy="#{entity.id}" filterMatchMode="contains" filterStyle="width: 60px;">
+							<h:outputText value="#{entity.id}"/>
+						</p:column>
+
+						<p:column headerText="#{msg['entity.name']}" sortBy="#{entity.name}" filterBy="#{entity.name}" filterMatchMode="contains">
+							<h:outputText value="#{entity.name}"/>
+						</p:column>
+
+						<p:column style="width: 100px;">
+							<p:commandButton icon="ui-icon-pencil" style="margin-left: 3px;" action="#{profileController.getFormPath()}" ajax="false" title="Editar" styleClass="btn-green">
+								<f:setPropertyActionListener value="#{entity}" target="#{profileController.entity}"/>
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash" title="Remover" oncomplete="PF('delete').show();" styleClass="btn-red" style="margin-left: 3px;">
+								<f:setPropertyActionListener value="#{entity}" target="#{profileController.entity}"/>
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+
+			</p:panelGrid>
+
+		</h:form>
+
+		<h:form id="formDelete">
+			<p:dialog id="confirmDelete" header="#{msg['label.dialog.alert']}!" widgetVar="delete" style="width: 200px;" width="200">
+				<h:panelGrid columns="1">
+					<h:outputText value="#{msg['confirm.delete']}"/>
+				</h:panelGrid>
+				<br/>
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{msg['entity.yes']}" action="#{profileController.delete()}" update=":mainForm" icon="ui-icon-check" oncomplete="PF('delete').hide();" />
+					<p:commandButton value="#{msg['entity.no']}" onclick="PF('delete').hide();" icon="ui-icon-cancel" type="button" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

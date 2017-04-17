@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/data/jpa 
+                            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+
+
+                            http://www.springframework.org/schema/task
+                            http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <import resource="classpath:/META-INF/myview-spring-init.xml"/>
+
+    <!-- Autoscan for annotations -->
+    <context:component-scan base-package="br.com.sol7"/>
+
+    <jpa:repositories base-package="br.com.sol7.orcamento"/>
+
+    <task:annotation-driven/>
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg>
+            <bean class="com.zaxxer.hikari.HikariConfig">
+                <property name="driverClassName" value="org.postgresql.Driver"/>
+                    <property name="jdbcUrl" value="jdbc:postgresql:default"/>
+                <property name="username" value="postgres"/>
+                <property name="password" value="postgres"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="outOfOrder" value="true"/>
+        <property name="validateOnMigrate" value="false"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          depends-on="flyway">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="br.com.sol7.orcamento.model"/>
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+        </property>
+        <property name="jpaProperties">
+            <map>
+                <entry key="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+                <entry key="hibernate.show_sql" value="false"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean class="br.com.sol7.orcamento.spring.SpringApplicationContextSupport"/>
+
+    <!--mail -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="username" value="1email@gmail.com.br"/>
+        <property name="password" value="1senha"/>
+        <property name="port" value="465"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="protocol" value="smtps"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.socketFactory.port">465</prop>
+                <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+                <prop key="mail.smtp.connectiontimeout">5000</prop>
+                <prop key="mail.smtp.sendpartial">true</prop>
+                <prop key="mail.smtp.userset">true</prop>
+                <prop key="mail.mime.charset">UTF-8</prop>
+            </props>
+        </property>
+
+    </bean>
+
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:version.properties</value>
+            </list>
+        </property>
+        <property name="searchSystemEnvironment" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+</beans>

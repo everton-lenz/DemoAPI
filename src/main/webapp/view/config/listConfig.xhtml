@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/templates/template.xhtml">
+
+	<ui:define name="content">
+
+
+        <style>
+            .ui-state-active, .ui-tabs-selected .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+                border: 1px solid #045E9F;
+                background: #FFFFFF;
+                font-weight: bold;
+                color: #045E9F;
+            }
+
+            .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+                color: #045E9F;
+                text-decoration: none;
+            }
+            .ui-fileupload-content {
+                padding: 0.2em 0.4em;
+                border-top-width: 0;
+                height: 0px;
+                width: 1px;
+                visibility: hidden;
+            }
+        </style>
+
+        <h:form id="mainForm">
+
+            <p:panelGrid columns="1" styleClass="div_form">
+                <h:panelGrid columns="1" style="width: 100%">
+                    <p:columnGroup>
+                        <h2 class="cabecario">#{msg['entity.config.system']}</h2>
+                        <h:outputLink value="#" rendered="#{configController.bHelper}" id="help-module" style="font-size: 20px; margin-right: 10px; color: #2283c5; right: 28px; position: absolute; margin-top: -14px;" class="fa fa-info-circle"/>
+                        <p:tooltip id="toolTip" value="#{configController.helper}" for="help-module" style="position: absolute;" rendered="#{configController.bHelper}" showEvent="focus" hideEvent="blur"/>
+                    </p:columnGroup>
+
+                    <p:separator id="separator" style="width:99%;" />
+
+                    <p:tabView dynamic="true" cache="true">
+                        <p:tab id="first" titleStyle="width: 150px;">
+                            <f:facet name="title">
+                                <i style="font-size: 16px; margin-right: 3px; margin-right: 3px;" class="fa fa-cogs" />
+                                <h:outputText value="#{msg['title.config.variables']}"/>
+                            </f:facet>
+
+
+                                <p:columnGroup>
+                                    <p:commandButton action="#{configController.prepareNewEntity}" value="#{msg['entity.insert']} #{msg['entity.config']}" icon="ui-icon-plus" ajax="false"/>
+
+                                </p:columnGroup>
+
+
+                                <h:panelGrid columns="1" styleClass="table_form">
+                                    <p:dataTable id="table" widgetVar="table" var="entity" value="#{configController.configList}"
+                                                 paginator="true" rows="10" filteredValue="#{configController.filteredConfig}"
+                                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 currentPageReportTemplate="(Pag. {currentPage}/{totalPages} - {totalRecords} registros)"
+                                                 paginatorPosition="bottom"
+                                                 rowsPerPageTemplate="10,15,30"
+                                                 emptyMessage="#{msg['global.emptyMessage']}">
+
+                                        <p:column headerText="#{msg['entity.id']}" style="width: 70px;" sortBy="#{entity.id}" filterBy="#{entity.id}" filterMatchMode="contains" filterStyle="width: 60px;">
+                                            <h:outputText value="#{entity.id}"/>
+                                        </p:column>
+
+                                        <p:column headerText="#{msg['entity.key']}" sortBy="#{entity.key}" style="width: 180px;" filterBy="#{entity.key}" filterMatchMode="contains">
+                                            <h:outputText value="#{entity.key}"/>
+                                        </p:column>
+
+                                        <p:column headerText="#{msg['entity.value']}" sortBy="#{entity.value}" filterBy="#{entity.value}" filterMatchMode="contains">
+                                            <h:outputText value="#{entity.value}"/>
+                                        </p:column>
+
+                                        <p:column style="width: 100px;">
+                                            <p:commandButton icon="ui-icon-pencil" style="margin-left: 3px;" action="#{configController.getFormPath()}" ajax="false" title="Editar" styleClass="btn-green">
+                                                <f:setPropertyActionListener value="#{entity}" target="#{configController.entity}"/>
+                                            </p:commandButton>
+
+                                            <p:commandButton icon="ui-icon-trash" title="Remover" oncomplete="PF('delete').show();" styleClass="btn-red" style="margin-left: 3px;">
+                                                <f:setPropertyActionListener value="#{entity}" target="#{configController.entity}"/>
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab id="secondLayout" titleStyle="width: 150px;">
+
+                            <f:facet name="title">
+                                <i style="font-size: 16px; margin-right: 3px; margin-right: 3px;" class="fa fa-paint-brush" />
+                                <h:outputText value="#{msg['title.config.layout']}"/>
+                            </f:facet>
+
+                                <h:panelGrid columns="1" styleClass="table_form2">
+                                    <h:panelGrid id="imagePanel" columns="3" styleClass="table_form2">
+                                        <p:outputLabel>#{msg['label.config.background']}:</p:outputLabel>
+                                        <p:fileUpload value="#{fileUploadController.layout.background}" fileUploadListener="#{fileUploadController.insertBackground}"
+                                                      label="Escolher arquivo" cancelLabel="Cancelar" mode="advanced" auto="true" skinSimple="true" dragDropSupport="false" allowTypes="/(\.|\/)(png|jpg)$/"
+                                                      invalidFileMessage="#{msg['label.invalid.file']}"/>
+                                        <p:outputLabel rendered="#{fileUploadController.layout.background eq null}"/>
+                                        <p:commandButton value="#{msg['entity.view']}" update=":formLayout"
+                                                         oncomplete="PF('background').show();" rendered="#{fileUploadController.layout.background ne null}"
+                                                         icon="fa fa-eye" style="float: right; margin-top: 0px;  height: 25px;  width: 130px;" styleClass="btn-green" />
+
+                                        <p:outputLabel>#{msg['label.config.icon']}:</p:outputLabel>
+                                        <p:fileUpload value="#{fileUploadController.layout.icon}" fileUploadListener="#{fileUploadController.insertIcon}"
+                                                      label="Escolher arquivo" cancelLabel="Cancelar" mode="advanced" auto="true" skinSimple="true" dragDropSupport="false" allowTypes="/(\.|\/)(png|jpg)$/"
+                                                      invalidFileMessage="#{msg['label.invalid.file']}" />
+                                        <p:outputLabel rendered="#{fileUploadController.layout.icon eq null}"/>
+                                        <p:commandButton value="#{msg['entity.view']}" update=":formLayout"
+                                                         oncomplete="PF('icon').show();" rendered="#{fileUploadController.layout.icon ne null}"
+                                                         icon="fa fa-eye" style="float: right; margin-top: 0px;  height: 25px;  width: 130px;" styleClass="btn-green" />
+                                        <p:outputLabel>#{msg['label.config.logo']}:</p:outputLabel>
+                                        <p:fileUpload value="#{fileUploadController.layout.logo}" fileUploadListener="#{fileUploadController.insertLogo}"
+                                                      label="Escolher arquivo" cancelLabel="Cancelar" mode="advanced" auto="true" skinSimple="true" dragDropSupport="false" allowTypes="/(\.|\/)(png|jpg)$/"
+                                                      invalidFileMessage="#{msg['label.invalid.file']}" />
+                                        <p:outputLabel rendered="#{fileUploadController.layout.logo eq null}"/>
+                                        <p:commandButton value="#{msg['entity.view']}" update=":formLayout"
+                                                         oncomplete="PF('logo').show();" rendered="#{fileUploadController.layout.logo ne null}"
+                                                         icon="fa fa-eye" style="float: right; margin-top: 0px;  height: 25px;  width: 130px;" styleClass="btn-green" />
+
+
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" styleClass="table_form2">
+                                        <p:outputLabel for="position" value="#{msg['entity.position.login']}:" />
+                                        <p:selectOneRadio  layout="grid" columns="1" id="position" value="#{fileUploadController.layout.loginPosition}">
+                                            <f:selectItem itemLabel="Centro" itemValue="c" />
+                                            <f:selectItem itemLabel="Direita" itemValue="r" />
+                                            <f:selectItem itemLabel="Esquerda" itemValue="l" />
+                                        </p:selectOneRadio>
+
+                                        <p:outputLabel>#{msg['label.config.color']}:</p:outputLabel>
+                                        <p:colorPicker value="#{fileUploadController.layout.color}"/>
+
+
+                                        <p:remoteCommand name="rc" update="imagePanel"/>
+
+                                        <p:commandButton value="#{msg['entity.save']} #{msg['entity.layout']}" oncomplete="PF('blockUI').unblock(); PF('save').show();"
+                                                         styleClass="btn-green" icon="fa fa-floppy-o"
+                                                         ajax="false" action="#{fileUploadController.saveFiles()}"  onclick="PF('blockUI').block()"/>
+                                    </h:panelGrid>
+                               </h:panelGrid>
+                            </p:tab>
+                    </p:tabView>
+                </h:panelGrid>
+            </p:panelGrid>
+		</h:form>
+
+        <p:dialog modal="true" widgetVar="dlg" showEffect="fade" hideEffect="fade" header="Selected Colors" resizable="false">
+            <h:panelGrid id="grid" columns="2" cellpadding="5">
+                <h:outputText value="Popup color: " />
+                <h:outputText value="#{fileUploadController.layout.color}" style="background-color: \##{fileUploadController.layout.color}" />
+            </h:panelGrid>
+        </p:dialog>
+
+        <h:form id="formDelete">
+            <p:dialog id="confirmDelete" header="#{msg['label.dialog.alert']}!" widgetVar="delete" style="width: 200px;" width="200">
+                <h:panelGrid columns="1">
+                    <h:outputText value="#{msg['confirm.delete']}"/>
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="#{msg['entity.yes']}" action="#{configController.delete()}" update=":mainForm" icon="ui-icon-check" oncomplete="PF('delete').hide();" />
+                    <p:commandButton value="#{msg['entity.no']}" onclick="PF('delete').hide();" icon="ui-icon-cancel" type="button" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+
+
+        <h:form id="formSaveLayout">
+            <p:dialog id="confirmSave" header="#{msg['label.dialog.alert']}!" widgetVar="save" style="width: 200px;" width="200">
+                <h:panelGrid columns="1">
+                    <h:outputText value="#{msg['confirm.save']}"/>
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="#{msg['entity.yes']}" action="#{layoutController.save()}" update=":mainForm" icon="ui-icon-check" oncomplete="PF('formSaveLayout').hide();" />
+                    <p:commandButton value="#{msg['entity.no']}" onclick="PF('formSaveLayout').hide();" icon="ui-icon-cancel" type="button" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formLayout">
+            <p:dialog header="#{msg['label.config.background']}" widgetVar="background">
+                <img alt="" src="#{pageContext.servletContext.contextPath}/app-resources/layout/#{fileUploadController.layout.background}" style="max-height: 500px; max-width: 600px;"/>
+            </p:dialog>
+
+            <p:dialog header="#{msg['label.config.logo']}" widgetVar="logo">
+                <img alt="" src="#{pageContext.servletContext.contextPath}/app-resources/layout/#{fileUploadController.layout.logo}" style="max-height: 500px; max-width: 600px;"/>
+            </p:dialog>
+
+            <p:dialog header="#{msg['label.config.icon']}" widgetVar="icon">
+                <img alt="" src="#{pageContext.servletContext.contextPath}/app-resources/layout/#{fileUploadController.layout.icon}" style="max-height: 500px; max-width: 600px;"/>
+            </p:dialog>
+        </h:form>
+
+	</ui:define>
+</ui:composition>

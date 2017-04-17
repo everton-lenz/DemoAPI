@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID"
+         version="2.5">
+
+    <display-name>Default</display-name>
+  
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+  
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+
+	<listener>
+	     <listener-class>
+	     	org.apache.myfaces.orchestra.conversation.servlet.ConversationManagerSessionListener
+	     </listener-class>
+	</listener>
+
+    <servlet>
+        <servlet-name>facesServlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>facesServlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>facesServlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>clean</param-value>
+    </context-param>
+
+    <welcome-file-list>
+      <welcome-file>default.jsf</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/view/error/expired.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/view/error/404.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/view/error/error.xhtml</location>
+    </error-page>
+
+
+    <!-- Etag Config -->
+    <filter>
+        <filter-name>ETag Filter</filter-name>
+        <filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ETag Filter</filter-name>
+        <url-pattern>/resources/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>GzipFilter</filter-name>
+        <filter-class>br.com.sol7.orcamento.gzip.GzipFilter</filter-class>
+        <init-param>
+            <param-name>bufferSize</param-name>
+            <param-value>16384</param-value>
+        </init-param>
+        <init-param>
+            <param-name>methods</param-name>
+            <param-value>GET,POST,PUT,DELETE</param-value>
+        </init-param>
+        <init-param>
+            <param-name>mimeTypes</param-name>
+            <param-value>text/html,text/plain,text/xml,application/xhtml+xml,text/css,application/javascript,text/javascript,application/json,text/json,image/svg+xml</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>
+
+
+    <!-- End -->
+
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SetCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>ApplicationResourceServlet</servlet-name>
+        <servlet-class>br.com.sol7.orcamento.util.ApplicationResourceServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ApplicationResourceServlet</servlet-name>
+        <url-pattern>/app-resources/*</url-pattern>
+    </servlet-mapping>
+</web-app>
